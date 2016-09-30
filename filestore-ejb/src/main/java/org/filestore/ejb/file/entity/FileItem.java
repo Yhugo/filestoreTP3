@@ -1,16 +1,24 @@
 package org.filestore.ejb.file.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@Entity
+@NamedQueries(
+		@NamedQuery(name="listAllFiles", query="SELECT i FROM FileItem i")
+)
 public class FileItem {
 
+	@Id
 	private String id;
+	@Column(length = 4000)
 	private String name;
 	private String type;
 	private long length;
 	private long nbdownloads;
 	private String owner;
+	@ElementCollection
 	private List<String> receivers;
 	private String message;
 	private Date creation;

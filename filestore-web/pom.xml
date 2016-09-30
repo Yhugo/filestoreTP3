@@ -8,7 +8,7 @@
 	<packaging>war</packaging>
 	
 	<parent>
-		<groupId>fr.miage.jayblanc</groupId>
+		<groupId>fr.miage.hugo</groupId>
 		<artifactId>filestore</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
@@ -20,7 +20,7 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>fr.miage.jayblanc</groupId>
+			<groupId>fr.miage.hugo</groupId>
 			<artifactId>filestore-ejb</artifactId>
 			<type>ejb</type>
 			<scope>provided</scope>
