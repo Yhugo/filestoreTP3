@@ -10,7 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+		<version.wildfly.maven.plugin>1.1.0.Alpha11</version.wildfly.maven.plugin>
 		<version.compiler.plugin>3.3</version.compiler.plugin>
 		<version.surefire.plugin>2.18.1</version.surefire.plugin>
 		<version.ear.plugin>2.10.1</version.ear.plugin>

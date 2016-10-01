@@ -12,9 +12,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 
 import org.filestore.ejb.config.FileStoreConfig;
 
+@Singleton
+@Startup
 public class BinaryStoreServiceBean implements BinaryStoreService {
 
 	private static final Logger LOGGER = Logger.getLogger(BinaryStoreServiceBean.class.getName());
