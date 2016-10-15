@@ -1,4 +1,4 @@
-package org.filestore.ejb.store.file;
+package org.filestore.ejb.file;
 
 import org.filestore.ejb.file.entity.FileItem;
 import org.junit.AfterClass;

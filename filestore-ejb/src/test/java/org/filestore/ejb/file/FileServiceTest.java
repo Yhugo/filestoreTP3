@@ -1,25 +1,31 @@
-package org.filestore.ejb.store.file;
+package org.filestore.ejb.file;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.SQLNonTransientConnectionException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 
-import org.filestore.ejb.file.FileService;
-import org.filestore.ejb.file.FileServiceBean;
-import org.filestore.ejb.file.FileServiceException;
 import org.filestore.ejb.file.entity.FileItem;
+import org.filestore.ejb.store.BinaryStoreService;
+import org.filestore.ejb.store.BinaryStoreServiceException;
+import org.filestore.ejb.store.BinaryStreamNotFoundException;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,6 +37,12 @@ public class FileServiceTest {
     private static EntityManagerFactory factory;
     private static EntityManager em;
     private static FileService service;
+
+    private static BinaryStoreService store;
+    private static Mockery context = new Mockery();
+
+   /*
+    private static ManagedExecutorService executor;*/
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -53,6 +65,12 @@ public class FileServiceTest {
         LOGGER.log(Level.INFO, "Building FileService");
         service = new FileServiceBean();
         ((FileServiceBean)service).em = em;
+        store = context.mock(BinaryStoreService.class);
+        ((FileServiceBean)service).store = store;
+
+        /*
+        executor = context.mock(ManagedExecutorService.class);
+        ((FileServiceBean)service).executor = executor;*/
     }
 
     @AfterClass
@@ -74,16 +92,23 @@ public class FileServiceTest {
         }
     }
 
-    @Test
-    public void testPostAndDeleteFile() throws FileServiceException {
+    //@Test
+    public void testPostAndDeleteFile() throws FileServiceException, BinaryStoreServiceException, BinaryStreamNotFoundException {
         try {
             em.getTransaction().begin();
+
+            context.checking(new Expectations() {{
+                oneOf (store).put(with(any(InputStream.class)));
+                oneOf (store).delete(with(any(String.class)));
+            //    allowing(executor).submit(with(any(Runnable.class)));
+            }});
 
             List<String> receivers = new ArrayList<String> ();
             receivers.add("sheldon@test.com");
             receivers.add("rajesh@test.com");
             receivers.add("penny@test.com");
-            String key = service.postFile("jayblanc@gmail.com", receivers, "Bazinga", "The.Big.Bang.Theory.S06E01.mkv", "this should be a uuid");
+            String key = service.postFile("jayblanc@gmail.com", receivers, "Bazinga", "The.Big.Bang.Theory.S06E01.mkv",
+                    new ByteArrayInputStream("this should be a uuid".getBytes()));
             assertNotNull(key);
 
             FileItem item = service.getFile(key);

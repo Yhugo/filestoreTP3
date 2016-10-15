@@ -12,13 +12,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Local;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import org.filestore.ejb.config.FileStoreConfig;
 
-@Singleton
 @Startup
+@Singleton(name="binarystore")
+@Local(BinaryStoreService.class)
 public class BinaryStoreServiceBean implements BinaryStoreService {
 
 	private static final Logger LOGGER = Logger.getLogger(BinaryStoreServiceBean.class.getName());
@@ -73,6 +75,19 @@ public class BinaryStoreServiceBean implements BinaryStoreService {
 			return Files.newInputStream(file, StandardOpenOption.READ);
 		} catch (IOException e) {
 			throw new BinaryStoreServiceException("unexpected error while opening stream", e);
+		}
+	}
+
+	@Override
+	public void delete(String key) throws BinaryStoreServiceException, BinaryStreamNotFoundException {
+		Path file = Paths.get(base.toString(), key);
+		if ( !Files.exists(file) ) {
+			throw new BinaryStreamNotFoundException("file not found in storage");
+		}
+		try {
+			Files.delete(file);
+		} catch (IOException e) {
+			throw new BinaryStoreServiceException("unexpected error while deleting stream", e);
 		}
 	}
 

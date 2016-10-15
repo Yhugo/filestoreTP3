@@ -18,6 +18,10 @@
 		<version.war.plugin>2.6</version.war.plugin>
 		<version.junit>4.12</version.junit>
 		<version.javaee>7.0</version.javaee>
+		<version.shrinkwrap>1.2.6</version.shrinkwrap>
+		<version.shrinkwrap-resolver>2.2.4</version.shrinkwrap-resolver>
+		<version.arquillian>1.1.11.Final</version.arquillian>
+		<version.wildfly-arquillian>2.0.0.Final</version.wildfly-arquillian>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<maven.compiler.source>1.7</maven.compiler.source>
 	</properties>
@@ -108,13 +112,45 @@
 				<version>${version.junit}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock-junit4</artifactId>
+                <version>2.8.2</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.shrinkwrap</groupId>
+				<artifactId>shrinkwrap-bom</artifactId>
+				<version>${version.shrinkwrap}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.shrinkwrap.resolver</groupId>
+				<artifactId>shrinkwrap-resolver-bom</artifactId>
+				<version>${version.shrinkwrap-resolver}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${version.arquillian}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.wildfly.arquillian</groupId>
+				<artifactId>wildfly-arquillian-container-managed</artifactId>
+				<version>${version.wildfly-arquillian}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	
 	<distributionManagement>
 		<repository>
 			<id>filestore-maven-repository</id>
-			<name>Fielstore Releases</name>
+			<name>Filestore Releases</name>
 			<url>http://nexus-jayblanc.rhcloud.com/nexus/content/repositories/releases/</url>
 		</repository>
 		<snapshotRepository>
@@ -131,10 +167,6 @@
 					<groupId>org.wildfly.plugins</groupId>
 					<artifactId>wildfly-maven-plugin</artifactId>
 					<version>${version.wildfly.maven.plugin}</version>
-					<inherited>true</inherited>
-					<configuration>
-						<skip>true</skip>
-					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
